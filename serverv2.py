@@ -39,8 +39,11 @@ def handle_client(conn, addr):
                 connected = False
             else:
                 for client in clients:
-                    print(client)
-                print(f"[{addr}] {msg}")
+                    if not client == conn:
+                        print(client)
+                        client.sendall(msg.encode(FORMAT))
+
+            print(f"[{addr}] {msg}")
 
     # Close connection when we jump off the while loop
     conn.close()
