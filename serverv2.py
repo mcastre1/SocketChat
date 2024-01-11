@@ -1,15 +1,18 @@
 import socket
 import threading
 
+
+clients = set()
+
+
 # Function used to start listening for new connections.
-
-
 def start(server):
     server.listen()
 
     # When a new connection is found, we create a thread and assign it to the handle_client function.
     while True:
         conn, addr = server.accept()
+        clients.add(conn)
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
 
@@ -32,9 +35,12 @@ def handle_client(conn, addr):
 
             # This is where we check to see if client wants to disconnect
             if msg == DISCONNECT_MESSAGE:
+                clients.remove(conn)
                 connected = False
-
-            print(f"[{addr}] {msg}")
+            else:
+                for client in clients:
+                    print(client)
+                print(f"[{addr}] {msg}")
 
     # Close connection when we jump off the while loop
     conn.close()
