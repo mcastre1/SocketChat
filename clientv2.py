@@ -30,10 +30,6 @@ def send():
         msg = input(":")
         message = msg.encode(FORMAT)  # Encode into byte format first.
 
-        if msg == DISCONNECT_MESSAGE:
-            connected = False
-            break
-
         msg_length = len(msg)
         send_length = str(msg_length).encode('utf-8')
         # Pads message length to make sure it folows the HEADER/FORMAT of 64 in this case.
@@ -42,9 +38,12 @@ def send():
         client.send(message)
         # print(client.recv(2048).decode(FORMAT))
 
+        if msg == DISCONNECT_MESSAGE:
+            connected = False
+
 
 # This is so I can talk to the server without having to close and open multiple times.
-receiving = threading.Thread(target=receive)
-receiving.start()
 sending = threading.Thread(target=send)
 sending.start()
+receiving = threading.Thread(target=receive)
+receiving.start()

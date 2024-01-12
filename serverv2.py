@@ -35,6 +35,7 @@ def handle_client(conn, addr):
 
             # This is where we check to see if client wants to disconnect
             if msg == DISCONNECT_MESSAGE:
+                conn.sendall(f"Disconnected".encode(FORMAT))
                 clients.remove(conn)
                 connected = False
             else:
