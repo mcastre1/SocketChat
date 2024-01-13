@@ -7,8 +7,9 @@ clients = set()
 
 # Function used to start listening for new connections.
 def start(server):
-    server.listen()
 
+    server.listen()
+    print("[LISTENING] Server Listening for new connections.")
     # When a new connection is found, we create a thread and assign it to the handle_client function.
     while True:
         conn, addr = server.accept()

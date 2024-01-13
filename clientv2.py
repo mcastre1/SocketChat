@@ -24,10 +24,11 @@ def receive():
         print(client.recv(2048).decode(FORMAT))
 
 
-def send():
+def send(name):
     global connected
     while connected:
         msg = input(":")
+        msg = f"{name}: {msg}"
         message = msg.encode(FORMAT)  # Encode into byte format first.
 
         msg_length = len(msg)
@@ -43,7 +44,9 @@ def send():
 
 
 # This is so I can talk to the server without having to close and open multiple times.
-sending = threading.Thread(target=send)
+name = input("Name: ")
+
+sending = threading.Thread(target=send, args=[name])
 sending.start()
 receiving = threading.Thread(target=receive)
 receiving.start()
