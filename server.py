@@ -1,6 +1,7 @@
 import socket
 import threading
-
+from Message import Message
+import pickle
 
 clients = set()
 
@@ -32,7 +33,10 @@ def handle_client(conn, addr):
         # We check if theres an actual message being received before we try to format it.
         if msg_length:
             msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
+            # msg = conn.recv(msg_length).decode(FORMAT)
+            msg = conn.recv(msg_length)
+            msg = pickle.loads(msg)
+            print(msg.msg)
 
             # This is where we check to see if client wants to disconnect
             if msg.split(' ')[1] == DISCONNECT_MESSAGE:

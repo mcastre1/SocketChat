@@ -1,5 +1,7 @@
 import socket
 import threading
+import pickle
+from Message import Message
 
 
 HEADER = 64
@@ -28,10 +30,14 @@ def send(name):
     global connected
     while connected:
         msg = input(":")
-        msg = f"{name}: {msg}"
-        message = msg.encode(FORMAT)  # Encode into byte format first.
+        # msg = f"{name}: {msg}"
+        msg_object = Message(msg, "", "")
+        msg_pickle = pickle.dumps(msg_object)
+        # message = msg.encode(FORMAT)  # Encode into byte format first.
+        message = msg_pickle
 
-        msg_length = len(msg)
+        # msg_length = len(msg)
+        msg_length = len(msg_pickle)
         send_length = str(msg_length).encode('utf-8')
         # Pads message length to make sure it folows the HEADER/FORMAT of 64 in this case.
         send_length += b' ' * (HEADER - len(send_length))
@@ -44,9 +50,9 @@ def send(name):
 
 
 # This is so I can talk to the server without having to close and open multiple times.
-name = input("Name: ")
+# name = input("Name: ")
 
-sending = threading.Thread(target=send, args=[name])
+sending = threading.Thread(target=send, args=[""])
 sending.start()
 receiving = threading.Thread(target=receive)
 receiving.start()
