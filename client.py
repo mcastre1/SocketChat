@@ -23,7 +23,7 @@ connected = True
 def receive():
     global connected
     while connected:
-        print(client.recv(2048).decode(FORMAT))
+        print(pickle.loads(client.recv(2048)).msg)
 
 
 def send(name):
