@@ -19,6 +19,8 @@ client.connect(ADDR)
 
 connected = True
 
+# We receive and print all messages from server here.
+
 
 def receive():
     global connected
@@ -38,20 +40,16 @@ def send(name):
     global connected
     while connected:
         msg = input(":")
-        # msg = f"{name}: {msg}"
         msg_object = Message(msg, "", "")
         msg_pickle = pickle.dumps(msg_object)
-        # message = msg.encode(FORMAT)  # Encode into byte format first.
         message = msg_pickle
 
-        # msg_length = len(msg)
         msg_length = len(msg_pickle)
         send_length = str(msg_length).encode('utf-8')
         # Pads message length to make sure it folows the HEADER/FORMAT of 64 in this case.
         send_length += b' ' * (HEADER - len(send_length))
         client.send(send_length)
         client.send(message)
-        # print(client.recv(2048).decode(FORMAT))
 
         if msg == DISCONNECT_MESSAGE:
             connected = False
