@@ -43,15 +43,28 @@ def handle_client(conn, addr):
 
             # This is where we check to see if client wants to disconnect
             if msg.msg == DISCONNECT_MESSAGE:
-                conn.sendall(pickle.dumps(
-                    Message("Disconnected", "Server", "Client")))
+                # Here we will have to send in the length of the object first so we can receive the entire message correctly
+                message = Message("Disconnected", "Server", "Client")
+                msg_pickled = pickle.dumps(message)
+                msg_length = len(msg_pickled)
+                send_length = str(msg_length).encode('utf-8')
+                send_length += b' ' * (HEADER - len(send_length))
+
+                conn.send(send_length)
+                conn.send(msg_pickled)
+
                 clients.remove(conn)
                 connected = False
             else:
                 for client in clients:
                     if not client == conn:
-                        print(client)
-                        client.sendall(pickle.dumps(msg))
+                        msg_pickled = pickle.dumps(msg)
+                        msg_length = len(msg_pickled)
+                        send_length = str(msg_length).encode('utf-8')
+                        send_length += b' ' * (HEADER - len(send_length))
+
+                        client.send(send_length)
+                        client.send(msg_pickled)
 
             print(f"[{addr}] {msg.msg}")
 
