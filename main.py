@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy
+from client import Client
 
 
 class MainWindow(QMainWindow):
@@ -56,6 +57,8 @@ class MainWindow(QMainWindow):
         # Adding both top and bottom layouts with their respective widgets to main layout.
         main_layout.addLayout(top_layout, stretch=7)
         main_layout.addLayout(bottom_layout, stretch=1)
+
+        client = Client()
 
 
 if __name__ == "__main__":
