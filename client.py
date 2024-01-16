@@ -24,8 +24,6 @@ class Client:
         # This is so I can talk to the server without having to close and open multiple times.
         # name = input("Name: ")
 
-        sending = threading.Thread(target=self.send, args=[""])
-        sending.start()
         receiving = threading.Thread(target=self.receive)
         receiving.start()
 
@@ -40,21 +38,17 @@ class Client:
 
                 msg = pickle.loads(msg)
 
-                print(msg.msg)
+    def send(self, msg):
+        msg_object = Message(msg, "", "")
+        msg_pickle = pickle.dumps(msg_object)
+        message = msg_pickle
 
-    def send(self, name):
-        while self.connected:
-            msg = input(":")
-            msg_object = Message(msg, "", "")
-            msg_pickle = pickle.dumps(msg_object)
-            message = msg_pickle
+        msg_length = len(msg_pickle)
+        send_length = str(msg_length).encode('utf-8')
+        # Pads message length to make sure it folows the HEADER/FORMAT of 64 in this case.
+        send_length += b' ' * (HEADER - len(send_length))
+        self.client.send(send_length)
+        self.client.send(message)
 
-            msg_length = len(msg_pickle)
-            send_length = str(msg_length).encode('utf-8')
-            # Pads message length to make sure it folows the HEADER/FORMAT of 64 in this case.
-            send_length += b' ' * (HEADER - len(send_length))
-            self.client.send(send_length)
-            self.client.send(message)
-
-            if msg == DISCONNECT_MESSAGE:
-                self.connected = False
+        if msg == DISCONNECT_MESSAGE:
+            self.connected = False

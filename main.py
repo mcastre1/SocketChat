@@ -9,6 +9,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 400, 400)
+        self.client = Client()
 
         self.ui()
 
@@ -47,6 +48,8 @@ class MainWindow(QMainWindow):
         # And the button for sending said messages.
         button_send = QPushButton('Send')
         bottom_layout.addWidget(button_send, stretch=1)
+        button_send.clicked.connect(
+            lambda: self.send_message(text_input.toPlainText(), text_input))
 
         # Set the size policy for the button to expanding for both width and height
         size_policy = button_send.sizePolicy()
@@ -58,7 +61,9 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(top_layout, stretch=7)
         main_layout.addLayout(bottom_layout, stretch=1)
 
-        client = Client()
+    def send_message(self, msg, qedit):
+        self.client.send(msg)
+        qedit.setText("")
 
 
 if __name__ == "__main__":
