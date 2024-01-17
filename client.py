@@ -14,11 +14,13 @@ ADDR = (SERVER, PORT)
 
 
 class Client:
-    def __init__(self):
+    def __init__(self, append_text):
 
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Socket connects requires a tuple of server address, port.
         self.client.connect(ADDR)
+
+        self.append_text = append_text
 
         self.connected = True
         # This is so I can talk to the server without having to close and open multiple times.
@@ -37,6 +39,8 @@ class Client:
                 msg = self.client.recv(msg_length)
 
                 msg = pickle.loads(msg)
+
+                self.append_text(msg)
 
     def send(self, msg):
         msg_object = Message(msg, "", "")

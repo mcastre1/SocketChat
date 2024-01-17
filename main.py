@@ -9,13 +9,13 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 400, 400)
-        self.client = Client()
+        self.client = Client(self.append_text)
 
         self.ui()
 
     def ui(self):
         # Creating the central area for widgets to live in main window.
-        central_widget = QWidget()
+        central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
         # This layout is in charge of all layouts.
@@ -25,16 +25,18 @@ class MainWindow(QMainWindow):
         top_layout = QVBoxLayout()
 
         # Creating the Textbox where we see all messages
-        text_screen = QTextEdit()
-        text_screen.setReadOnly(True)  # We set the text_screen as read only
-        text_screen.setWordWrapMode(1)  # Set WordWrap mode (1: WrapAnywhere)
+        self.text_screen = QTextEdit()
+        # We set the text_screen as read only
+        self.text_screen.setReadOnly(True)
+        # Set WordWrap mode (1: WrapAnywhere)
+        self.text_screen.setWordWrapMode(1)
 
         # This will keep the text at the bottom of textbox
-        cursor = text_screen.textCursor()
+        cursor = self.text_screen.textCursor()
         cursor.movePosition(cursor.End)
-        text_screen.setTextCursor(cursor)
+        self.text_screen.setTextCursor(cursor)
 
-        top_layout.addWidget(text_screen)
+        top_layout.addWidget(self.text_screen)
 
         # Creating a horizontal layout for the bottom part of the app.
         bottom_layout = QHBoxLayout()
@@ -63,7 +65,11 @@ class MainWindow(QMainWindow):
 
     def send_message(self, msg, qedit):
         self.client.send(msg)
+        self.text_screen.append(f"You: {msg}")
         qedit.setText("")
+
+    def append_text(self, msg):
+        self.text_screen.append(f"Them: {msg.msg}")
 
 
 if __name__ == "__main__":
