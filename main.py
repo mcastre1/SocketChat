@@ -66,6 +66,7 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(bottom_layout, stretch=1)
 
     def send_message(self, msg, qedit):
+        msg = msg.strip()  # Get rid of trailing/leading whitespace
         self.client.send(msg)
 
         self.text_screen.setPlainText(
@@ -74,6 +75,7 @@ class MainWindow(QMainWindow):
         qedit.setText("")
 
     def append_text(self, msg):
+        msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
         self.text_screen.setPlainText(
             self.text_screen.toPlainText() + f"\nThem: {msg.msg}")
 
