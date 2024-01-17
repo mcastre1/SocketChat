@@ -9,9 +9,11 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 400, 400)
-        self.client = Client(self.append_text)
-
         self.ui()
+
+        self.client = Client()
+        self.client.upate_text.connect(self.append_text)
+        self.client.run()
 
     def ui(self):
         # Creating the central area for widgets to live in main window.
@@ -65,11 +67,17 @@ class MainWindow(QMainWindow):
 
     def send_message(self, msg, qedit):
         self.client.send(msg)
-        self.text_screen.append(f"You: {msg}")
+
+        self.text_screen.setPlainText(
+            self.text_screen.toPlainText() + f"\nYou: {msg}")
+
         qedit.setText("")
 
     def append_text(self, msg):
-        self.text_screen.append(f"Them: {msg.msg}")
+        self.text_screen.setPlainText(
+            self.text_screen.toPlainText() + f"\nThem: {msg.msg}")
+
+        print(msg.msg)
 
 
 if __name__ == "__main__":

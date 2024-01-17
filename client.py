@@ -2,6 +2,7 @@ import socket
 import threading
 import pickle
 from Message import Message
+from PyQt5.QtCore import pyqtSignal, QObject
 
 HEADER = 64
 # Which port should the server use, 5050 just because. Use something is not being used for something else.
@@ -13,19 +14,22 @@ SERVER = "192.168.86.95"
 ADDR = (SERVER, PORT)
 
 
-class Client:
-    def __init__(self, append_text):
+class Client(QObject):
+    upate_text = pyqtSignal(Message)
 
+    def __init__(self):
+        super().__init__()
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Socket connects requires a tuple of server address, port.
         self.client.connect(ADDR)
-
-        self.append_text = append_text
 
         self.connected = True
         # This is so I can talk to the server without having to close and open multiple times.
         # name = input("Name: ")
 
+        # self.receive()
+
+    def run(self):
         receiving = threading.Thread(target=self.receive)
         receiving.start()
 
@@ -40,7 +44,7 @@ class Client:
 
                 msg = pickle.loads(msg)
 
-                self.append_text(msg)
+                self.upate_text.emit(msg)
 
     def send(self, msg):
         msg_object = Message(msg, "", "")
