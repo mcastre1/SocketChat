@@ -11,10 +11,10 @@ db_connection = mysql.connector.connect(
 mycursor = db_connection.cursor()
 
 TABLES = {}
-TABLES['users'] = """CREATE TABLE 'users' ('user_no' int(11) NOT NULL AUTO_INCREMENT,
-'name' varchar(255) NOT NULL,
-'email' varchar(255) NOT NULL,
-PRIMARY KEY ('user_no')"""
+TABLES['users'] = """CREATE TABLE `users` (`user_no` int(11) NOT NULL AUTO_INCREMENT,
+`name` varchar(255) NOT NULL,
+`email` varchar(255) NOT NULL,
+PRIMARY KEY (`user_no`))"""
 
 # mycursor.execute("CREATE DATABASE socketchat")
 
@@ -31,3 +31,17 @@ for table in TABLES:
         print(err.msg)
     else:
         print("OK")
+
+add_user = ("INSERT INTO users "
+            "(name, email)"
+            "VALUES (%s, %s)")
+
+user_data = ('Miguel', 'miguelcastrejongal@gmail.com')
+
+mycursor.execute(add_user, user_data)
+db_connection.commit()
+
+mycursor.execute("SELECT * FROM users")
+
+for user in mycursor:
+    print(user)
