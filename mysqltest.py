@@ -1,4 +1,22 @@
 import mysql.connector
+import hashlib
+
+
+def hash_password(password):
+    # Choosing a secure hashing algorithm, in this case SHA-256
+    hash_algorithm = hashlib.sha256()
+
+    # Encoding the password as bytes before hashing
+    password_bytes = password.encode('utf-8')
+
+    # Update the hash object with the password bytes
+    hash_algorithm.update(password_bytes)
+
+    # Get the hexadecimal representation of the hashed password
+    hashed_password = hash_algorithm.hexdigest()
+
+    return hashed_password
+
 
 # Replace with your database details
 db_connection = mysql.connector.connect(
@@ -52,7 +70,7 @@ add_account = ("INSERT INTO accounts "
                "(account_name, password, user_no)"
                "VALUES (%s, %s, %s)")
 
-account_data = ('255589', '255587', 1)
+account_data = ('255589', hash_password('255587'), 1)
 
 mycursor.execute(add_account, account_data)
 db_connection.commit()
@@ -63,7 +81,13 @@ mycursor.execute("SELECT * FROM users")
 for user in mycursor:
     print(user)
 
-mycursor.execute("SELECT * FROM accounts")
+# mycursor.execute("SELECT * FROM accounts")
 
-for account in mycursor:
-    print(account)
+# for account in mycursor:
+#    print(account)
+
+mycursor.execute(("SELECT * FROM accounts, users WHERE accounts.password = "
+                  "%s"), (hash_password('255587'),))
+
+for row in mycursor:
+    print(row)
