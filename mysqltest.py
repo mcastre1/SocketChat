@@ -15,10 +15,17 @@ TABLES['users'] = """CREATE TABLE `users` (`user_no` int(11) NOT NULL AUTO_INCRE
 `name` varchar(255) NOT NULL,
 `email` varchar(255) NOT NULL,
 PRIMARY KEY (`user_no`))"""
+TABLES['accounts'] = """CREATE TABLE `accounts` (`acc_no` int(11) NOT NULL AUTO_INCREMENT,
+`account_name` varchar(255) NOT NULL,
+`password` varchar(255) NOT NULL,
+`user_no` int(11),
+PRIMARY KEY (`acc_no`),
+FOREIGN KEY (`user_no`) REFERENCES users(`user_no`))"""
 
 # mycursor.execute("CREATE DATABASE socketchat")
 
 # mycursor.execute("SHOW DATABASES")
+mycursor.execute("DROP TABLE IF EXISTS accounts")
 mycursor.execute("DROP TABLE IF EXISTS users")
 # mycursor.execute("CREATE TABLE users (name VARCHAR(255), email VARCHAR(255))")
 
@@ -41,7 +48,22 @@ user_data = ('Miguel', 'miguelcastrejongal@gmail.com')
 mycursor.execute(add_user, user_data)
 db_connection.commit()
 
+add_account = ("INSERT INTO accounts "
+               "(account_name, password, user_no)"
+               "VALUES (%s, %s, %s)")
+
+account_data = ('255589', '255587', 1)
+
+mycursor.execute(add_account, account_data)
+db_connection.commit()
+
+
 mycursor.execute("SELECT * FROM users")
 
 for user in mycursor:
     print(user)
+
+mycursor.execute("SELECT * FROM accounts")
+
+for account in mycursor:
+    print(account)
