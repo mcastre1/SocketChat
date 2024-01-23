@@ -1,8 +1,9 @@
 import hashlib
 
 
-class Hash():
-    def hash_sha256(self, password):
+class Hash:
+    @staticmethod
+    def hash_sha256(password):
         # Choosing a secure hashing algorithm, in this case SHA-256
         hash_algorithm = hashlib.sha256()
 

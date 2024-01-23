@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 import sys
 import mysql.connector
 import hashlib
-from hash import hash_sha256
+from hash import Hash
 
 
 class LoginScreen(QWidget):
@@ -36,7 +36,7 @@ class LoginScreen(QWidget):
         username = self.username_input.text()
         password = self.password_input.text()
 
-        password = hash_sha256(password)
+        password = Hash.hash_sha256(password)
 
         # Connect to db
         db_connection = mysql.connector.connect(
@@ -53,10 +53,13 @@ class LoginScreen(QWidget):
         SELECT users.user_no
         FROM users
         JOIN accounts ON users.user_no = accounts.user_no
-        WHERE accounts.account = %s AND accounts.password = %s
+        WHERE accounts.account_name = %s AND accounts.password = %s
         """
-
+        # Execute the query above.
         cursor.execute(query, (username, password))
+
+        for row in cursor:
+            print(row)
 
         # Replace the following condition with your actual login logic
         if username == "user" and password == "password":
