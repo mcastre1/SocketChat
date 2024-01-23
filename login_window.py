@@ -66,6 +66,7 @@ class LoginScreen(QWidget):
             QMessageBox.information(
                 self, "Login Successful", "Welcome, {}".format(username))
             self.callback_user_info("some number")
+            db_connection.close()
         else:
             QMessageBox.warning(self, "Login Failed",
                                 "Invalid username or password")
