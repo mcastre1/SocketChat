@@ -3,9 +3,11 @@ from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, Q
 from client import Client
 
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super(MainWindow, self).__init__()
+class ChatWindow(QMainWindow):
+    def __init__(self, user_no):
+        super(ChatWindow, self).__init__()
+        self.user_no = user_no
+        print(self.user_no)
 
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 400, 400)
@@ -84,6 +86,6 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    main_window = MainWindow()
+    main_window = ChatWindow()
     main_window.show()
     sys.exit(app.exec_())

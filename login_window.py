@@ -58,14 +58,18 @@ class LoginScreen(QWidget):
         # Execute the query above.
         cursor.execute(query, (username, password))
 
+        success = False
+        user_no = 0
+
         for row in cursor:
-            print(row)
+            user_no = int(row[0])
+            success = True
 
         # Replace the following condition with your actual login logic
-        if username == "user" and password == "password":
+        if success:
             QMessageBox.information(
                 self, "Login Successful", "Welcome, {}".format(username))
-            self.callback_user_info("some number")
+            self.callback_user_info(user_no)
             db_connection.close()
         else:
             QMessageBox.warning(self, "Login Failed",
