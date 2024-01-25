@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy
 from client import Client
+import mysql.connector
 
 
 class ChatWindow(QMainWindow):
@@ -9,6 +10,9 @@ class ChatWindow(QMainWindow):
         self.user_no = user_no
         print(self.user_no)
 
+        self.user_name = self.get_user_name()
+        print(self.user_name)
+
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 400, 400)
         self.ui()
@@ -16,6 +20,33 @@ class ChatWindow(QMainWindow):
         self.client = Client()
         self.client.upate_text.connect(self.append_text)
         self.client.run()
+
+    def get_user_name(self):
+        # Connect to db
+        db_connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Mc255587!",
+            database='socketchat'
+        )
+
+        cursor = db_connection.cursor()
+
+        # Call DB account table and retrieve user number on succesful login
+        query = """
+        SELECT name
+        FROM users
+        WHERE user_no = %s
+        """
+        # Execute the query above.
+        cursor.execute(query, [self.user_no])
+
+        user_name = None
+
+        for row in cursor:
+            user_name = row[0]
+
+        return user_name
 
     def ui(self):
         # Creating the central area for widgets to live in main window.
