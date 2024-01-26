@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy, QMessageBox
 from client import Client
 import mysql.connector
 
@@ -77,16 +77,16 @@ class ChatWindow(QMainWindow):
         bottom_layout = QHBoxLayout()
 
         # Creating the Text box for sending messages
-        text_input = QTextEdit()
-        text_input.setWordWrapMode(1)
+        self.text_input = QTextEdit()
+        self.text_input.setWordWrapMode(1)
 
-        bottom_layout.addWidget(text_input, stretch=7)
+        bottom_layout.addWidget(self.text_input, stretch=7)
 
         # And the button for sending said messages.
         button_send = QPushButton('Send')
         bottom_layout.addWidget(button_send, stretch=1)
         button_send.clicked.connect(
-            lambda: self.send_message(text_input.toPlainText(), text_input))
+            lambda: self.send_message(self.text_input.toPlainText(), self.text_input))
 
         # Set the size policy for the button to expanding for both width and height
         size_policy = button_send.sizePolicy()
@@ -99,13 +99,14 @@ class ChatWindow(QMainWindow):
         main_layout.addLayout(bottom_layout, stretch=1)
 
     def send_message(self, msg, qedit):
+
         msg = msg.strip()  # Get rid of trailing/leading whitespace
         self.client.send(msg=msg, sender=self.user_name)
 
         self.text_screen.setPlainText(
             self.text_screen.toPlainText() + f"\nYou: {msg}")
 
-        qedit.setText("")
+        self.text_input.setText("")
 
     def append_text(self, msg):
         msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
@@ -113,6 +114,17 @@ class ChatWindow(QMainWindow):
             self.text_screen.toPlainText() + f"\n{msg.sender}:{msg.msg}")
 
         print(msg.msg)
+
+    def closeEvent(self, event):
+        # Define your custom logic here
+        reply = QMessageBox.question(self, 'Confirmation', 'Are you sure you want to log out?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.send_message("!DISCONNECT", "")
+            event.accept()
+        else:
+            event.ignore()
 
 
 if __name__ == "__main__":
