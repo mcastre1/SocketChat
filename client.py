@@ -46,8 +46,8 @@ class Client(QObject):
 
                 self.upate_text.emit(msg)
 
-    def send(self, msg):
-        msg_object = Message(msg, "", "")
+    def send(self, msg, sender):
+        msg_object = Message(msg, sender, "")
         msg_pickle = pickle.dumps(msg_object)
         message = msg_pickle
 

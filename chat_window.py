@@ -100,7 +100,7 @@ class ChatWindow(QMainWindow):
 
     def send_message(self, msg, qedit):
         msg = msg.strip()  # Get rid of trailing/leading whitespace
-        self.client.send(msg)
+        self.client.send(msg=msg, sender=self.user_name)
 
         self.text_screen.setPlainText(
             self.text_screen.toPlainText() + f"\nYou: {msg}")
@@ -110,7 +110,7 @@ class ChatWindow(QMainWindow):
     def append_text(self, msg):
         msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
         self.text_screen.setPlainText(
-            self.text_screen.toPlainText() + f"\nThem: {msg.msg}")
+            self.text_screen.toPlainText() + f"\n{msg.sender}:{msg.msg}")
 
         print(msg.msg)
 
