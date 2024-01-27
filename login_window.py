@@ -50,7 +50,7 @@ class LoginScreen(QWidget):
 
         # Call DB account table and retrieve user number on succesful login
         query = """
-        SELECT users.user_no
+        SELECT users.user_no, users.name
         FROM users
         JOIN accounts ON users.user_no = accounts.user_no
         WHERE accounts.account_name = %s AND accounts.password = %s
@@ -60,15 +60,17 @@ class LoginScreen(QWidget):
 
         success = False
         user_no = 0
+        user_name = ""
 
         for row in cursor:
             user_no = int(row[0])
+            user_name = row[1]
             success = True
 
         # Replace the following condition with your actual login logic
         if success:
             QMessageBox.information(
-                self, "Login Successful", "Welcome, {}".format(username))
+                self, "Login Successful", "Welcome, {}".format(user_name))
             self.callback_user_info(user_no)
             db_connection.close()
         else:
