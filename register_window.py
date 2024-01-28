@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QLineEdit, QPushButton
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QLineEdit, QPushButton, QDesktopWidget
 import sys
+import mysql.connector
 
 
 class RegisterWindow(QWidget):
@@ -9,9 +10,16 @@ class RegisterWindow(QWidget):
 
     # Creates all ui components in the register window.
     def ui_init(self):
+        # Geometry of screen to make sure it appears at the center of current screen.
+        self.screen_centerx, self.screen_centery = QDesktopWidget().availableGeometry(
+        ).center().x(), QDesktopWidget().availableGeometry().center().y()
+        self.height = 150
+        self.width = 300
+
         # Title of screen and size
         self.setWindowTitle('Register')
-        self.setGeometry(100, 100, 300, 150)
+        self.setGeometry(self.screen_centerx - self.width/2,
+                         self.screen_centery - self.height/2, self.width, self.height)
 
         # Vertical layout
         layout = QVBoxLayout()
@@ -31,11 +39,23 @@ class RegisterWindow(QWidget):
         layout.addWidget(self.email_input)
 
         self.register_button = QPushButton('Register')
+        self.register_button.clicked.connect(self.new_user)
 
         layout.addWidget(self.register_button)
 
         # Setting this QWidget layout to the one with the added widgets above.
         self.setLayout(layout)
+
+    def new_user(self):
+        # Connect to db
+        db_connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Mc255587!",
+            database='socketchat'
+        )
+
+        cursor = db_connection.cursor()
 
 
 if __name__ == '__main__':
