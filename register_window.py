@@ -24,6 +24,20 @@ class RegisterWindow(QWidget):
         # Vertical layout
         layout = QVBoxLayout()
 
+        # Adding bouth ui components for the users account name
+        self.account_label = QLabel("Account:")
+        self.account_input = QLineEdit()
+
+        layout.addWidget(self.account_label)
+        layout.addWidget(self.account_input)
+
+        # Adding bouth ui components for the users password.
+        self.password_label = QLabel("Password:")
+        self.password_input = QLineEdit()
+
+        layout.addWidget(self.password_label)
+        layout.addWidget(self.password_input)
+
         self.name_label = QLabel("Name:")
         self.name_input = QLineEdit()
 
@@ -56,6 +70,24 @@ class RegisterWindow(QWidget):
         )
 
         cursor = db_connection.cursor()
+
+        insert_query = "INSERT INTO users (name, email) VALUES (%s, %s)"
+        insert_data = (self.name_input.text(), self.email_input.text())
+
+        print(insert_data)
+
+        cursor.execute(insert_query, insert_data)
+
+        last_inserted_id = cursor.lastrowid
+
+        insert_query = ("INSERT INTO accounts "
+                        "(account_name, password, user_no)"
+                        "VALUES (%s, %s, %s)")
+
+        insert_data = (self.account_input.text(),
+                       self.password_input.text(), last_inserted_id)
+
+        cursor.execute(insert_query, insert_data)
 
 
 if __name__ == '__main__':
