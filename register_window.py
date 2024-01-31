@@ -71,23 +71,24 @@ class RegisterWindow(QWidget):
 
         cursor = db_connection.cursor()
 
-        insert_query = "INSERT INTO users (name, email) VALUES (%s, %s)"
-        insert_data = (self.name_input.text(), self.email_input.text())
+        try:
+            insert_query = "INSERT INTO users (name, email) VALUES (%s, %s)"
+            insert_data = (self.name_input.text(), self.email_input.text())
 
-        print(insert_data)
+            cursor.execute(insert_query, insert_data)
 
-        cursor.execute(insert_query, insert_data)
+            last_inserted_id = cursor.lastrowid
 
-        last_inserted_id = cursor.lastrowid
+            insert_query = ("INSERT INTO accounts "
+                            "(account_name, password, user_no)"
+                            "VALUES (%s, %s, %s)")
 
-        insert_query = ("INSERT INTO accounts "
-                        "(account_name, password, user_no)"
-                        "VALUES (%s, %s, %s)")
+            insert_data = (self.account_input.text(),
+                           self.password_input.text(), last_inserted_id)
 
-        insert_data = (self.account_input.text(),
-                       self.password_input.text(), last_inserted_id)
-
-        cursor.execute(insert_query, insert_data)
+            cursor.execute(insert_query, insert_data)
+        except:
+            print("Error")
 
 
 if __name__ == '__main__':
