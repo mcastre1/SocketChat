@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QLineEdit, QPushButton, QDesktopWidget
 import sys
 import mysql.connector
+from hash import Hash
 
 
 class RegisterWindow(QWidget):
@@ -34,6 +35,7 @@ class RegisterWindow(QWidget):
         # Adding bouth ui components for the users password.
         self.password_label = QLabel("Password:")
         self.password_input = QLineEdit()
+        # Used to hide password and convert into * characters on textbox.
         self.password_input.setEchoMode(QLineEdit.Password)
 
         layout.addWidget(self.password_label)
@@ -85,7 +87,7 @@ class RegisterWindow(QWidget):
                             "VALUES (%s, %s, %s)")
 
             insert_data = (self.account_input.text(),
-                           self.password_input.text(), last_inserted_id)
+                           Hash.hash_sha256(self.password_input.text()), last_inserted_id)
 
             cursor.execute(insert_query, insert_data)
         except:
