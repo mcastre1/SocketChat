@@ -34,6 +34,7 @@ class RegisterWindow(QWidget):
         # Adding bouth ui components for the users password.
         self.password_label = QLabel("Password:")
         self.password_input = QLineEdit()
+        self.password_input.setEchoMode(QLineEdit.Password)
 
         layout.addWidget(self.password_label)
         layout.addWidget(self.password_input)
