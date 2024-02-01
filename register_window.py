@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QLineEdi
 import sys
 import mysql.connector
 from hash import Hash
+from Validation import Validation
 
 
 class RegisterWindow(QWidget):
@@ -72,16 +73,25 @@ class RegisterWindow(QWidget):
             database='socketchat'
         )
 
+        # Cursor to execute queries
         cursor = db_connection.cursor()
 
+        # Validation of fields
+        email_validated = Validation.validate_email(self.email_input.text())
+        print(email_validated)
+
+        # Using try except to make sure theres no problems on database side.
         try:
+            # Creating a new row in users
             insert_query = "INSERT INTO users (name, email) VALUES (%s, %s)"
             insert_data = (self.name_input.text(), self.email_input.text())
 
             cursor.execute(insert_query, insert_data)
 
+            # Keeping track of the new users id
             last_inserted_id = cursor.lastrowid
 
+            # Use new user id as foreign key to create a new account.
             insert_query = ("INSERT INTO accounts "
                             "(account_name, password, user_no)"
                             "VALUES (%s, %s, %s)")
