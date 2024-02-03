@@ -78,7 +78,16 @@ class RegisterWindow(QWidget):
 
         # Validation of fields
         email_validated = Validation.validate_email(self.email_input.text())
+        account_validated = Validation.validate_account(
+            self.account_input.text())
+        name_validated = Validation.validate_name(self.name_input.text())
+        password_validated = Validation.validate_password(
+            self.password_input.text())
+
         print(email_validated)
+        print(account_validated)
+        print(name_validated)
+        print(password_validated)
 
         # Using try except to make sure theres no problems on database side.
         try:
