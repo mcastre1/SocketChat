@@ -3,6 +3,7 @@ import sys
 import mysql.connector
 from hash import Hash
 from Validation import Validation
+from Popup import Popup
 
 
 class RegisterWindow(QWidget):
@@ -88,6 +89,8 @@ class RegisterWindow(QWidget):
         print(account_validated)
         print(name_validated)
         print(password_validated)
+
+        popup = Popup("title", "message")
 
         # Using try except to make sure theres no problems on database side.
         try:
