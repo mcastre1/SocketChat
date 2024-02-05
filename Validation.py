@@ -14,13 +14,13 @@ class Validation:
     # Validates name
     @staticmethod
     def validate_name(name):
-        pattern = r"^[a-z0-9._]*$"
+        pattern = r"^[a-z0-9._]+$"
         return re.match(pattern, name) is not None
 
     # Validate username
     @staticmethod
     def validate_account(username):
-        pattern = r"^[a-z0-9._]*$"
+        pattern = r"^[a-z0-9._]+$"
         return re.match(pattern, username) is not None
 
     # Validate password
