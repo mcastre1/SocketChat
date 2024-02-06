@@ -85,12 +85,23 @@ class RegisterWindow(QWidget):
         password_validated = Validation.validate_password(
             self.password_input.text())
 
+        # Validation messages
+        val_message = ""
         print(email_validated)
         print(account_validated)
         print(name_validated)
         print(password_validated)
 
-        popup = Popup("title", "message")
+        if not account_validated:
+            val_message = val_message + "Account not valid.\n"
+        if not password_validated:
+            val_message = val_message + "Password not valid.\n"
+        if not name_validated:
+            val_message = val_message + "Name not valid.\n"
+        if not email_validated:
+            val_message = val_message + "Email not valid.\n"
+
+        popup = Popup("Something went wrong", val_message)
 
         # Using try except to make sure theres no problems on database side.
         try:
