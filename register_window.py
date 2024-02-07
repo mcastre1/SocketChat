@@ -101,30 +101,32 @@ class RegisterWindow(QWidget):
         if not email_validated:
             val_message = val_message + "Email not valid.\n"
 
-        popup = Popup("Something went wrong", val_message)
+        if email_validated and account_validated and name_validated and password_validated:
+            # Using try except to make sure theres no problems on database side.
+            try:
+                # Creating a new row in users
+                insert_query = "INSERT INTO users (name, email) VALUES (%s, %s)"
+                insert_data = (self.name_input.text(), self.email_input.text())
 
-        # Using try except to make sure theres no problems on database side.
-        try:
-            # Creating a new row in users
-            insert_query = "INSERT INTO users (name, email) VALUES (%s, %s)"
-            insert_data = (self.name_input.text(), self.email_input.text())
+                cursor.execute(insert_query, insert_data)
 
-            cursor.execute(insert_query, insert_data)
+                # Keeping track of the new users id
+                last_inserted_id = cursor.lastrowid
 
-            # Keeping track of the new users id
-            last_inserted_id = cursor.lastrowid
+                # Use new user id as foreign key to create a new account.
+                insert_query = ("INSERT INTO accounts "
+                                "(account_name, password, user_no)"
+                                "VALUES (%s, %s, %s)")
 
-            # Use new user id as foreign key to create a new account.
-            insert_query = ("INSERT INTO accounts "
-                            "(account_name, password, user_no)"
-                            "VALUES (%s, %s, %s)")
+                insert_data = (self.account_input.text(),
+                               Hash.hash_sha256(self.password_input.text()), last_inserted_id)
 
-            insert_data = (self.account_input.text(),
-                           Hash.hash_sha256(self.password_input.text()), last_inserted_id)
-
-            cursor.execute(insert_query, insert_data)
-        except:
-            print("Error")
+                cursor.execute(insert_query, insert_data)
+            except:
+                print("Error")
+        else:
+            # Popup window with messages.
+            popup = Popup("Something went wrong", val_message)
 
 
 if __name__ == '__main__':
