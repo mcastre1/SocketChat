@@ -122,6 +122,8 @@ class RegisterWindow(QWidget):
                                Hash.hash_sha256(self.password_input.text()), last_inserted_id)
 
                 cursor.execute(insert_query, insert_data)
+                db_connection.commit()
+                db_connection.close()
             except:
                 print("Error")
         else:
