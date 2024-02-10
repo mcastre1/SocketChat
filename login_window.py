@@ -3,12 +3,15 @@ import sys
 import mysql.connector
 import hashlib
 from hash import Hash
+from register_window import RegisterWindow
 
 
 class LoginScreen(QWidget):
     def __init__(self, callback_user_info):
         super().__init__()
         self.callback_user_info = callback_user_info
+
+        self.register_window = RegisterWindow()
 
         self.setWindowTitle("Login Page")
         self.setGeometry(100, 100, 300, 150)
@@ -30,7 +33,14 @@ class LoginScreen(QWidget):
         login_button.clicked.connect(self.check_login)
         layout.addWidget(login_button)
 
+        register_button = QPushButton("Register")
+        register_button.clicked.connect(self.show_register_window)
+        layout.addWidget(register_button)
+
         self.setLayout(layout)
+
+    def show_register_window(self):
+        self.register_window.show()
 
     def check_login(self):
         username = self.username_input.text()
