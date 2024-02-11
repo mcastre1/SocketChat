@@ -4,6 +4,7 @@ import mysql.connector
 from hash import Hash
 from Validation import Validation
 from Popup import Popup
+from enviroment import get_window_centers
 
 
 class RegisterWindow(QWidget):
@@ -14,15 +15,14 @@ class RegisterWindow(QWidget):
     # Creates all ui components in the register window.
     def ui_init(self):
         # Geometry of screen to make sure it appears at the center of current screen.
-        self.screen_centerx, self.screen_centery = QDesktopWidget().availableGeometry(
-        ).center().x(), QDesktopWidget().availableGeometry().center().y()
+        self.screen_centerx, self.screen_centery = get_window_centers()
         self.height = 150
         self.width = 300
 
         # Title of screen and size
         self.setWindowTitle('Register')
-        self.setGeometry(self.screen_centerx - self.width/2,
-                         self.screen_centery - self.height/2, self.width, self.height)
+        self.setGeometry(self.screen_centerx - int(self.width/2),
+                         self.screen_centery - int(self.height/2), self.width, self.height)
 
         # Vertical layout
         layout = QVBoxLayout()
