@@ -4,6 +4,7 @@ import mysql.connector
 import hashlib
 from hash import Hash
 from register_window import RegisterWindow
+from enviroment import get_window_centers
 
 
 class LoginScreen(QWidget):
@@ -12,9 +13,13 @@ class LoginScreen(QWidget):
         self.callback_user_info = callback_user_info
 
         self.register_window = RegisterWindow()
+        self.width = 300
+        self.height = 150
+        self.screen_centerx, self.screen_centery = get_window_centers()
 
         self.setWindowTitle("Login Page")
-        self.setGeometry(100, 100, 300, 150)
+        self.setGeometry(self.screen_centerx - int(self.width/2),
+                         self.screen_centery - int(self.height/2), self.width, self.height)
 
         layout = QVBoxLayout()
 
