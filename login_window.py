@@ -13,8 +13,12 @@ class LoginScreen(QWidget):
         self.callback_user_info = callback_user_info
 
         self.register_window = RegisterWindow()
+
+        # Screen dimensions
         self.width = 300
         self.height = 150
+
+        # Current screen center points
         self.screen_centerx, self.screen_centery = get_window_centers()
 
         self.setWindowTitle("Login Page")

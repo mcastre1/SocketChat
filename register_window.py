@@ -87,10 +87,6 @@ class RegisterWindow(QWidget):
 
         # Validation messages
         val_message = ""
-        print(email_validated)
-        print(account_validated)
-        print(name_validated)
-        print(password_validated)
 
         if not account_validated:
             val_message = val_message + "Account not valid.\n"
@@ -124,6 +120,10 @@ class RegisterWindow(QWidget):
                 cursor.execute(insert_query, insert_data)
                 db_connection.commit()
                 db_connection.close()
+
+                popup = Popup(
+                    "Success", f"Succesfully created a new account ({self.account_input.text()})")
+                self.close()
             except:
                 print("Error")
         else:
