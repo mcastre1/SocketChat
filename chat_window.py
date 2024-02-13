@@ -21,6 +21,8 @@ class ChatWindow(QMainWindow):
         self.client.upate_text.connect(self.append_text)
         self.client.run()
 
+        self.send_message("Connection from ID: ", self.user_name)
+
     def get_user_name(self):
         # Connect to db
         db_connection = mysql.connector.connect(
