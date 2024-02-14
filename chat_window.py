@@ -21,7 +21,7 @@ class ChatWindow(QMainWindow):
         self.client.upate_text.connect(self.append_text)
         self.client.run()
 
-        self.send_message("Connection from ID: ", self.user_name)
+        self.send_message(f"Connection from ID: {self.user_no}")
 
     def get_user_name(self):
         # Connect to db
@@ -100,7 +100,7 @@ class ChatWindow(QMainWindow):
         main_layout.addLayout(top_layout, stretch=7)
         main_layout.addLayout(bottom_layout, stretch=1)
 
-    def send_message(self, msg, qedit):
+    def send_message(self, msg):
 
         msg = msg.strip()  # Get rid of trailing/leading whitespace
         self.client.send(msg=msg, sender=self.user_name)
@@ -123,7 +123,7 @@ class ChatWindow(QMainWindow):
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
-            self.send_message("!DISCONNECT", "")
+            self.send_message("!DISCONNECT")
             event.accept()
         else:
             event.ignore()

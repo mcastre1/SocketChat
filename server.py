@@ -7,6 +7,7 @@ import pickle
 clients = set()
 
 # Function used to start listening for new connections
+users = set()
 
 
 def start(server):
@@ -57,7 +58,13 @@ def handle_client(conn, addr):
                 connected = False
             else:
                 for client in clients:
-                    if not client == conn:
+                    # Here we do whatever we need to save for future reference, instead of on other clients iterations.
+                    if client == conn:  # Also add an and to check for certain new connection message.
+                        msg_pickled = pickle.dumps(msg)
+                        # Might need to change message object to keep track of user number so its easier to retrieve.
+                        users.add(msg.msg)
+
+                    elif not client == conn:
                         msg_pickled = pickle.dumps(msg)
                         msg_length = len(msg_pickled)
                         send_length = str(msg_length).encode('utf-8')
