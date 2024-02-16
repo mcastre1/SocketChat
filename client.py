@@ -1,7 +1,7 @@
 import socket
 import threading
 import pickle
-from Message import Message
+from Message import Message, NewConnection
 from PyQt5.QtCore import pyqtSignal, QObject
 
 HEADER = 64
@@ -46,8 +46,13 @@ class Client(QObject):
 
                 self.upate_text.emit(msg)
 
-    def send(self, msg, sender):
-        msg_object = Message(msg, sender, "")
+    def send(self, msg, sender, message_type):
+        # These if branches are to check type of messages being sent.
+        if message_type == Message:
+            msg_object = Message(msg, sender, "")
+        elif message_type == NewConnection:
+            msg_object = NewConnection(msg, sender, "Server")
+
         msg_pickle = pickle.dumps(msg_object)
         message = msg_pickle
 

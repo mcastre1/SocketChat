@@ -41,7 +41,6 @@ def handle_client(conn, addr):
 
             # Here we convert the bytes from pickle into the actual Message object.
             msg = pickle.loads(msg)
-            print(type(msg))
 
             # This is where we check to see if client wants to disconnect
             if msg.msg == DISCONNECT_MESSAGE:

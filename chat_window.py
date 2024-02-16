@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy, QMessageBox
 from client import Client
 import mysql.connector
+from Message import NewConnection, Message
 
 
 class ChatWindow(QMainWindow):
@@ -21,7 +22,7 @@ class ChatWindow(QMainWindow):
         self.client.upate_text.connect(self.append_text)
         self.client.run()
 
-        self.send_message(f"Connection from ID: {self.user_no}")
+        self.send_message(f"Connection from ID: {self.user_no}", NewConnection)
 
     def get_user_name(self):
         # Connect to db
@@ -88,7 +89,7 @@ class ChatWindow(QMainWindow):
         button_send = QPushButton('Send')
         bottom_layout.addWidget(button_send, stretch=1)
         button_send.clicked.connect(
-            lambda: self.send_message(self.text_input.toPlainText(), self.text_input))
+            lambda: self.send_message(self.text_input.toPlainText(), Message))
 
         # Set the size policy for the button to expanding for both width and height
         size_policy = button_send.sizePolicy()
@@ -100,15 +101,21 @@ class ChatWindow(QMainWindow):
         main_layout.addLayout(top_layout, stretch=7)
         main_layout.addLayout(bottom_layout, stretch=1)
 
-    def send_message(self, msg):
+    def send_message(self, msg, msg_type):
 
-        msg = msg.strip()  # Get rid of trailing/leading whitespace
-        self.client.send(msg=msg, sender=self.user_name)
+        if msg_type == Message:
+            msg = msg.strip()  # Get rid of trailing/leading whitespace
+            self.client.send(msg=msg, sender=self.user_name,
+                             message_type=Message)
 
-        self.text_screen.setPlainText(
-            self.text_screen.toPlainText() + f"\nYou: {msg}")
+            self.text_screen.setPlainText(
+                self.text_screen.toPlainText() + f"\nYou: {msg}")
 
-        self.text_input.setText("")
+            self.text_input.setText("")
+        elif msg_type == NewConnection:
+            msg = msg.strip()
+            self.client.send(msg=msg, sender=self.user_name,
+                             message_type=NewConnection)
 
     def append_text(self, msg):
         msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
@@ -123,7 +130,7 @@ class ChatWindow(QMainWindow):
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
-            self.send_message("!DISCONNECT")
+            self.send_message("!DISCONNECT", msg_type=Message)
             event.accept()
         else:
             event.ignore()
