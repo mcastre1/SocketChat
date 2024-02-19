@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import socket
 import threading
 from typing import List
@@ -14,7 +14,7 @@ users = set()
 
 @dataclass
 class Connections:
-    connections: List = []
+    connections: List = field(default_factory=list)
 
 
 connections = Connections()
@@ -77,6 +77,8 @@ def handle_client(conn, addr):
                         client.send(send_length)
                         client.send(msg_pickled)
 
+            connections.connections.append(msg)
+            print(connections.connections)
             print(f"[{addr}] {msg.msg}")
 
     # Close connection when we jump off the while loop
