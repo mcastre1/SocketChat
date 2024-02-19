@@ -1,5 +1,7 @@
+from dataclasses import dataclass
 import socket
 import threading
+from typing import List
 from Message import Message
 import pickle
 
@@ -8,6 +10,14 @@ clients = set()
 
 # Function used to start listening for new connections
 users = set()
+
+
+@dataclass
+class Connections:
+    connections: List = []
+
+
+connections = Connections()
 
 
 def start(server):
