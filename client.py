@@ -3,6 +3,7 @@ import threading
 import pickle
 from Message import Message, NewConnection
 from PyQt5.QtCore import pyqtSignal, QObject
+from server import Connections
 
 HEADER = 64
 # Which port should the server use, 5050 just because. Use something is not being used for something else.
@@ -16,6 +17,8 @@ ADDR = (SERVER, PORT)
 
 class Client(QObject):
     upate_text = pyqtSignal(Message)
+
+    connections = []
 
     def __init__(self):
         super().__init__()
