@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 import socket
 import threading
 from typing import List
-from Message import Message
+from Message import Message, NewConnection
 import pickle
 
 # Keep track of connections
@@ -66,6 +66,11 @@ def handle_client(conn, addr):
 
                 clients.remove(conn)
                 connected = False
+
+            # Check if the type of message we receive is of type new connection
+            # If so, save this connection for future use.
+            if isinstance(msg, NewConnection):
+                print("New connection!")
             else:
                 for client in clients:
                     if not client == conn:

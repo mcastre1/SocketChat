@@ -3,7 +3,6 @@ import threading
 import pickle
 from Message import Message, NewConnection
 from PyQt5.QtCore import pyqtSignal, QObject
-from server import Connections
 
 HEADER = 64
 # Which port should the server use, 5050 just because. Use something is not being used for something else.
