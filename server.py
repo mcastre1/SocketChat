@@ -67,23 +67,22 @@ def handle_client(conn, addr):
                 clients.remove(conn)
                 connected = False
 
-            # Check if the type of message we receive is of type new connection
-            # If so, save this connection for future use.
-            if isinstance(msg, NewConnection):
-                print("New connection!")
             else:
                 for client in clients:
                     if not client == conn:
-                        msg_pickled = pickle.dumps(msg)
-                        msg_length = len(msg_pickled)
-                        send_length = str(msg_length).encode('utf-8')
-                        send_length += b' ' * (HEADER - len(send_length))
+                        # Check if the type of message we receive is of type new connection
+                        # If so, save this connection for future use.
+                        if isinstance(msg, NewConnection):
+                            connections.connections.append(msg)
+                        else:
+                            msg_pickled = pickle.dumps(msg)
+                            msg_length = len(msg_pickled)
+                            send_length = str(msg_length).encode('utf-8')
+                            send_length += b' ' * (HEADER - len(send_length))
 
-                        client.send(send_length)
-                        client.send(msg_pickled)
+                            client.send(send_length)
+                            client.send(msg_pickled)
 
-            connections.connections.append(msg)
-            print(connections.connections)
             print(f"[{addr}] {msg.msg}")
 
     # Close connection when we jump off the while loop

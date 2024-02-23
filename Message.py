@@ -6,7 +6,7 @@ class Message:
 
 
 class NewConnection:
-    def __init__(self, msg, sender, recipient):
+    def __init__(self, msg, sender_id, recipient):
         self.msg = msg
-        self.sender = sender
+        self.sender_id = sender_id
         self.recipient = recipient

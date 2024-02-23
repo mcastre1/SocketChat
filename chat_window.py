@@ -114,7 +114,7 @@ class ChatWindow(QMainWindow):
             self.text_input.setText("")
         elif msg_type == NewConnection:
             msg = msg.strip()
-            self.client.send(msg=msg, sender=self.user_name,
+            self.client.send(msg=msg, sender=self.user_no,
                              message_type=NewConnection)
 
     def append_text(self, msg):
