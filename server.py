@@ -4,18 +4,13 @@ import threading
 from typing import List
 from Message import Message, NewConnection
 import pickle
+from Connections import Connections
 
 # Keep track of connections
 clients = set()
 
 # Function used to start listening for new connections
 users = set()
-
-
-@dataclass
-class Connections:
-    connections: List = field(default_factory=list)
-
 
 connections = Connections()
 
