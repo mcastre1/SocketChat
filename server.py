@@ -62,7 +62,7 @@ def handle_client(conn, addr):
                 clients.remove(conn)
                 connected = False
             elif isinstance(msg, NewConnection):
-                connections.add_connection(msg)
+                connections.add_connection(conn=conn, user_id=msg.sender_id)
             else:
                 for client in clients:
                     if not client == conn:
