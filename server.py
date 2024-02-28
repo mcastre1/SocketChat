@@ -63,6 +63,15 @@ def handle_client(conn, addr):
                 connected = False
             elif isinstance(msg, NewConnection):
                 connections.add_connection(conn=conn, user_id=msg.sender_id)
+                for client in clients:
+                    if not client == conn:
+                        msg_pickled = pickle.dumps(msg)
+                        msg_length = len(msg_pickled)
+                        send_length = str(msg_length).encode('utf-8')
+                        send_length += b' ' * (HEADER - len(send_length))
+
+                        client.send(send_length)
+                        client.send(msg_pickled)
             else:
                 for client in clients:
                     if not client == conn:

@@ -3,6 +3,7 @@ import threading
 import pickle
 from Message import Message, NewConnection
 from PyQt5.QtCore import pyqtSignal, QObject
+from Connections import Connections
 
 HEADER = 64
 # Which port should the server use, 5050 just because. Use something is not being used for something else.
@@ -15,7 +16,7 @@ ADDR = (SERVER, PORT)
 
 
 class Client(QObject):
-    upate_text = pyqtSignal(Message)
+    upate_text = pyqtSignal(object)
 
     connections = []
 
@@ -46,7 +47,12 @@ class Client(QObject):
 
                 msg = pickle.loads(msg)
 
-                self.upate_text.emit(msg)
+                # If the received message is a new connection info, we dont have to display it on the text box.
+                # We also do this so we dont have to check all over again every time we raise the pyqtsignal
+                if isinstance(msg, NewConnection):
+                    print(msg)
+                else:
+                    self.upate_text.emit(msg)
 
     def send(self, msg, sender, message_type):
         # These if branches are to check type of messages being sent.
