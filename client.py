@@ -51,7 +51,7 @@ class Client(QObject):
                 # We also do this so we dont have to check all over again every time we raise the pyqtsignal
                 if isinstance(msg, NewConnection):
                     self.connections.append(msg)
-                    print(f"x Has logged in!")
+                    print(f"{msg.sender_name} has logged in!")
                 else:
                     self.upate_text.emit(msg)
 
