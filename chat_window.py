@@ -115,7 +115,7 @@ class ChatWindow(QMainWindow):
         elif msg_type == NewConnection:
             msg = msg.strip()
             self.client.send(msg=msg, sender=self.user_no,
-                             message_type=NewConnection)
+                             message_type=NewConnection, sender_name=self.user_name)
 
     def append_text(self, msg):
         msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace

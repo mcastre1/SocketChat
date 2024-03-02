@@ -55,12 +55,12 @@ class Client(QObject):
                 else:
                     self.upate_text.emit(msg)
 
-    def send(self, msg, sender, message_type):
+    def send(self, msg, sender, message_type, sender_name=""):
         # These if branches are to check type of messages being sent.
         if message_type == Message:
             msg_object = Message(msg, sender, "")
         elif message_type == NewConnection:
-            msg_object = NewConnection(msg, sender, "Server")
+            msg_object = NewConnection(msg, sender, "Server", sender_name)
 
         msg_pickle = pickle.dumps(msg_object)
         message = msg_pickle
