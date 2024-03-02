@@ -27,10 +27,6 @@ class Client(QObject):
         self.client.connect(ADDR)
 
         self.connected = True
-        # This is so I can talk to the server without having to close and open multiple times.
-        # name = input("Name: ")
-
-        # self.receive()
 
     def run(self):
         receiving = threading.Thread(target=self.receive)

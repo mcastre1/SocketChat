@@ -61,6 +61,10 @@ def handle_client(conn, addr):
 
                 clients.remove(conn)
                 connected = False
+
+                # for clients in clients:
+                #   msg_pickled = pickle.dumps(Message(""))
+
             elif isinstance(msg, NewConnection):
                 connections.add_connection(conn=conn, user_id=msg.sender_id)
                 for client in clients:
