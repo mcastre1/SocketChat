@@ -8,5 +8,5 @@ class Connections:
     def remove_connection(self, user_id):
         del self.connections[user_id]
 
-    def get_connections(self):
+    def get_connections(self) -> dict:
         return self.connections
