@@ -43,11 +43,17 @@ class Client(QObject):
 
                 msg = pickle.loads(msg)
 
+                print(msg)
                 # If the received message is a new connection info, we dont have to display it on the text box.
                 # We also do this so we dont have to check all over again every time we raise the pyqtsignal
                 if isinstance(msg, NewConnection):
                     self.connections.append(msg)
                     print(f"{msg.sender_name} has logged in!")
+                elif isinstance(msg, Connections):
+                    print(msg)  # Here I need to save all the new connections
+                    conns = msg.connections.keys()
+                    for k in conns:
+                        print(msg.connections[k])
                 else:
                     self.upate_text.emit(msg)
 

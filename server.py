@@ -79,9 +79,18 @@ def handle_client(conn, addr):
                         client.send(send_length)
                         client.send(msg_pickled)
 
-                conns = connections.get_connections()
-                for k in conns.keys():
-                    print(conns[k])
+                # conns = connections.get_connections()
+                # for k in conns.keys():
+                #     print(conns[k])
+
+                for client in clients:
+                    msg_pickled = pickle.dumps(connections)
+                    msg_length = len(msg_pickled)
+                    send_length = str(msg_length).encode('utf-8')
+                    send_length += b' ' * (HEADER - len(send_length))
+
+                    client.send(send_length)
+                    client.send(msg_pickled)
 
             else:
                 for client in clients:
