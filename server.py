@@ -62,8 +62,10 @@ def handle_client(conn, addr):
                 clients.remove(conn)
                 connected = False
 
-                # for clients in clients:
-                #   msg_pickled = pickle.dumps(Message(""))
+                # removing the connection info from connections object, which is then sent to the clients.
+                for k in connections.connections.keys():
+                    if connections.connections[k][1] == addr:
+                        del connections.connections[k][1]
 
             elif isinstance(msg, NewConnection):
                 connections.add_connection(
@@ -78,10 +80,6 @@ def handle_client(conn, addr):
 
                         client.send(send_length)
                         client.send(msg_pickled)
-
-                # conns = connections.get_connections()
-                # for k in conns.keys():
-                #     print(conns[k])
 
                 for client in clients:
                     msg_pickled = pickle.dumps(connections)
