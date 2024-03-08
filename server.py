@@ -69,13 +69,14 @@ def handle_client(conn, addr):
 
                 # Send the new list of connected clients after the removal of the last disconnect
                 for client in clients:
-                    msg_pickled = pickle.dumps(connections)
-                    msg_length = len(msg_pickled)
-                    send_length = str(msg_length).encode('utf-8')
-                    send_length += b' ' * (HEADER - len(send_length))
+                    if not client == conn:
+                        msg_pickled = pickle.dumps(connections)
+                        msg_length = len(msg_pickled)
+                        send_length = str(msg_length).encode('utf-8')
+                        send_length += b' ' * (HEADER - len(send_length))
 
-                    client.send(send_length)
-                    client.send(msg_pickled)
+                        client.send(send_length)
+                        client.send(msg_pickled)
 
             elif isinstance(msg, NewConnection):
                 connections.add_connection(
