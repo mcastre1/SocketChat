@@ -49,11 +49,9 @@ class Client(QObject):
                 if isinstance(msg, NewConnection):
                     self.connections.append(msg)
                     print(f"{msg.sender_name} has logged in!")
+                # Here we get all the connections received and overwrite the current list of connections
                 elif isinstance(msg, Connections):
-                    print(msg)  # Here I need to save all the new connections
-                    conns = msg.connections.keys()
-                    for k in conns:
-                        print(msg.connections[k])
+                    self.connections = msg.connections
                 else:
                     self.upate_text.emit(msg)
 
