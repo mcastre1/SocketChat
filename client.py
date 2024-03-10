@@ -46,11 +46,11 @@ class Client(QObject):
                 print(msg)
                 # If the received message is a new connection info, we dont have to display it on the text box.
                 # We also do this so we dont have to check all over again every time we raise the pyqtsignal
-                if isinstance(msg, NewConnection):
-                    self.connections.append(msg)
-                    print(f"{msg.sender_name} has logged in!")
+                # if isinstance(msg, NewConnection):
+                #     self.connections = msg
+                #     print(f"{msg.sender_name} has logged in!")
                 # Here we get all the connections received and overwrite the current list of connections
-                elif isinstance(msg, Connections):
+                if isinstance(msg, Connections):
                     self.connections = msg.connections
                 else:
                     self.upate_text.emit(msg)

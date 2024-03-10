@@ -63,9 +63,21 @@ def handle_client(conn, addr):
                 connected = False
 
                 # removing the connection info from connections object, which is then sent to the clients.
+                key = None
                 for k in connections.connections.keys():
                     if connections.connections[k][1] == addr:
-                        del connections.connections[k][1]
+                        msg_pickled = pickle.dumps(
+                            Message(f"{connections.connections[k][0]} has Disconnected.", "", ""))
+                        msg_length = len(msg_pickled)
+                        send_length = str(msg_length).encode('utf-8')
+                        send_length += b' ' * (HEADER - len(send_length))
+
+                        client.send(send_length)
+                        client.send(msg_pickled)
+
+                        key = connections.connections[k]
+
+                del key
 
                 # Send the new list of connected clients after the removal of the last disconnect
                 for client in clients:

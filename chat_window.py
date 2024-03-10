@@ -118,11 +118,13 @@ class ChatWindow(QMainWindow):
                              message_type=NewConnection, sender_name=self.user_name)
 
     def append_text(self, msg):
-        msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
-        self.text_screen.setPlainText(
-            self.text_screen.toPlainText() + f"\n{msg.sender}:{msg.msg}")
 
-        print(msg.msg)
+        if not isinstance(msg, NewConnection):
+            msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
+            self.text_screen.setPlainText(
+                self.text_screen.toPlainText() + f"\n{msg.sender}:{msg.msg}")
+
+            print(msg.msg)
 
     def closeEvent(self, event):
         # Define your custom logic here
