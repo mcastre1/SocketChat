@@ -57,7 +57,10 @@ class ChatWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
         # This layout is in charge of all layouts.
-        main_layout = QVBoxLayout(central_widget)
+        main_layout = QHBoxLayout(central_widget)
+
+        left_layout = QVBoxLayout()
+        right_layout = QVBoxLayout()
 
         # Creating a vertical layout for the top part.
         top_layout = QVBoxLayout()
@@ -98,8 +101,11 @@ class ChatWindow(QMainWindow):
         button_send.setSizePolicy(size_policy)
 
         # Adding both top and bottom layouts with their respective widgets to main layout.
-        main_layout.addLayout(top_layout, stretch=7)
-        main_layout.addLayout(bottom_layout, stretch=1)
+        left_layout.addLayout(top_layout, stretch=7)
+        left_layout.addLayout(bottom_layout, stretch=1)
+
+        main_layout.addLayout(left_layout)
+        main_layout.addLayout(right_layout)
 
     def send_message(self, msg, msg_type):
 
@@ -140,6 +146,6 @@ class ChatWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    main_window = ChatWindow()
+    main_window = ChatWindow("1")
     main_window.show()
     sys.exit(app.exec_())
