@@ -100,12 +100,13 @@ class ChatWindow(QMainWindow):
         size_policy.setVerticalPolicy(QSizePolicy.Expanding)
         button_send.setSizePolicy(size_policy)
 
-        # Adding both top and bottom layouts with their respective widgets to main layout.
+        # Adding both top and bottom layouts with their respective widgets to left layout.
         left_layout.addLayout(top_layout, stretch=7)
         left_layout.addLayout(bottom_layout, stretch=1)
 
-        main_layout.addLayout(left_layout)
-        main_layout.addLayout(right_layout)
+        # Adding left and right layouts to main layout.
+        main_layout.addLayout(left_layout, stretch=7)
+        main_layout.addLayout(right_layout, stretch=1)
 
     def send_message(self, msg, msg_type):
 
