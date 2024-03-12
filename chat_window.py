@@ -54,15 +54,14 @@ class ChatWindow(QMainWindow):
 
     # Update the current connected clients list.
     def update_client_list(self, conn_dict):
-        for i in reversed(range(self.right_layout.count())):
-            widgetToRemove = self.right_layout.itemAt(i).widget()
-            # remove it from the layout list
-            self.right_layout.removeWidget(widgetToRemove)
-            # remove it from the gui
-            widgetToRemove.setParent(None)
+        # First we clear out the text
+        self.clients_text.setPlainText("")
 
+        # Then we append all the user names in connections
         for key in conn_dict.keys():
-            self.right_layout.addWidget(QLabel(conn_dict[key][0]))
+            user_name = conn_dict[key][0]
+            self.clients_text.setPlainText(
+                self.clients_text.toPlainText() + f"\n{user_name}")
 
     def ui(self):
         # Creating the central area for widgets to live in main window.
@@ -117,12 +116,20 @@ class ChatWindow(QMainWindow):
         self.left_layout.addLayout(self.top_layout, stretch=7)
         self.left_layout.addLayout(bottom_layout, stretch=1)
 
+        # Creating the Textbox where we see all messages
+        self.clients_text = QTextEdit()
+        # We set the text_screen as read only
+        self.clients_text.setReadOnly(True)
+        # Set WordWrap mode (1: WrapAnywhere)
+        self.clients_text.setWordWrapMode(1)
+
+        self.right_layout.addWidget(self.clients_text)
+
         # Adding left and right layouts to main layout.
         self.main_layout.addLayout(self.left_layout, stretch=7)
         self.main_layout.addLayout(self.right_layout, stretch=1)
 
     def send_message(self, msg, msg_type):
-
         if msg_type == Message:
             msg = msg.strip()  # Get rid of trailing/leading whitespace
             self.client.send(msg=msg, sender=self.user_name,
@@ -137,14 +144,12 @@ class ChatWindow(QMainWindow):
             self.client.send(msg=msg, sender=self.user_no,
                              message_type=NewConnection, sender_name=self.user_name)
 
+    # Appends the received text to the text box on the left layout.
     def append_text(self, msg):
-
         if not isinstance(msg, NewConnection):
             msg.msg = msg.msg.strip()  # Get rid of trailing/leading whitespace
             self.text_screen.setPlainText(
                 self.text_screen.toPlainText() + f"\n{msg.sender}:{msg.msg}")
-
-            print(msg.msg)
 
     def closeEvent(self, event):
         # Define your custom logic here
