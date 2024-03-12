@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy, QMessageBox
+from PyQt5.QtWidgets import QApplication, QTextEdit, QMainWindow, QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QSizePolicy, QMessageBox, QLabel
 from client import Client
 import mysql.connector
 from Message import NewConnection, Message
@@ -18,7 +18,7 @@ class ChatWindow(QMainWindow):
         self.setGeometry(100, 100, 400, 400)
         self.ui()
 
-        self.client = Client()
+        self.client = Client(self.update_client_list)
         self.client.upate_text.connect(self.append_text)
         self.client.run()
 
@@ -51,19 +51,31 @@ class ChatWindow(QMainWindow):
 
         return user_name
 
+    # Update the current connected clients list.
+    def update_client_list(self, conn_dict):
+        for i in reversed(range(self.right_layout.count())):
+            widgetToRemove = self.right_layout.itemAt(i).widget()
+            # remove it from the layout list
+            self.right_layout.removeWidget(widgetToRemove)
+            # remove it from the gui
+            widgetToRemove.setParent(None)
+
+        for key in conn_dict.keys():
+            self.right_layout.addWidget(QLabel(conn_dict[key][0]))
+
     def ui(self):
         # Creating the central area for widgets to live in main window.
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
         # This layout is in charge of all layouts.
-        main_layout = QHBoxLayout(central_widget)
+        self.main_layout = QHBoxLayout(central_widget)
 
-        left_layout = QVBoxLayout()
-        right_layout = QVBoxLayout()
+        self.left_layout = QVBoxLayout()
+        self.right_layout = QVBoxLayout()
 
         # Creating a vertical layout for the top part.
-        top_layout = QVBoxLayout()
+        self.top_layout = QVBoxLayout()
 
         # Creating the Textbox where we see all messages
         self.text_screen = QTextEdit()
@@ -77,7 +89,7 @@ class ChatWindow(QMainWindow):
         cursor.movePosition(cursor.End)
         self.text_screen.setTextCursor(cursor)
 
-        top_layout.addWidget(self.text_screen)
+        self.top_layout.addWidget(self.text_screen)
 
         # Creating a horizontal layout for the bottom part of the app.
         bottom_layout = QHBoxLayout()
@@ -101,12 +113,12 @@ class ChatWindow(QMainWindow):
         button_send.setSizePolicy(size_policy)
 
         # Adding both top and bottom layouts with their respective widgets to left layout.
-        left_layout.addLayout(top_layout, stretch=7)
-        left_layout.addLayout(bottom_layout, stretch=1)
+        self.left_layout.addLayout(self.top_layout, stretch=7)
+        self.left_layout.addLayout(bottom_layout, stretch=1)
 
         # Adding left and right layouts to main layout.
-        main_layout.addLayout(left_layout, stretch=7)
-        main_layout.addLayout(right_layout, stretch=1)
+        self.main_layout.addLayout(self.left_layout, stretch=7)
+        self.main_layout.addLayout(self.right_layout, stretch=1)
 
     def send_message(self, msg, msg_type):
 
