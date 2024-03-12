@@ -18,8 +18,9 @@ class ChatWindow(QMainWindow):
         self.setGeometry(100, 100, 400, 400)
         self.ui()
 
-        self.client = Client(self.update_client_list)
+        self.client = Client()
         self.client.upate_text.connect(self.append_text)
+        self.client.update_client_list.connect(self.update_client_list)
         self.client.run()
 
         self.send_message(f"Connection from ID: {self.user_no}", NewConnection)

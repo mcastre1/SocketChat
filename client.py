@@ -17,17 +17,15 @@ ADDR = (SERVER, PORT)
 
 class Client(QObject):
     upate_text = pyqtSignal(object)
+    update_client_list = pyqtSignal(object)
 
     connections = []
 
-    def __init__(self, update_client_list):
+    def __init__(self):
         super().__init__()
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Socket connects requires a tuple of server address, port.
         self.client.connect(ADDR)
-
-        # Reference to function in chat window to update client list.
-        self.update_client_list = update_client_list
 
         self.connected = True
 
@@ -55,7 +53,7 @@ class Client(QObject):
                 # Here we get all the connections received and overwrite the current list of connections
                 if isinstance(msg, Connections):
                     self.connections = msg.connections
-                    self.update_client_list(self.connections)
+                    self.update_client_list.emit(self.connections)
                 else:
                     self.upate_text.emit(msg)
 
