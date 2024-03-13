@@ -9,10 +9,8 @@ class ChatWindow(QMainWindow):
     def __init__(self, user_no):
         super(ChatWindow, self).__init__()
         self.user_no = user_no
-        print(self.user_no)
 
         self.user_name = self.get_user_name()
-        print(self.user_name)
 
         self.setWindowTitle("Main Window")
         self.setGeometry(100, 100, 400, 400)
